@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  lazylibrarian:
+    image: linuxserver/lazylibrarian
+    container_name: lazylibrarian
+    hostname: lazylibrarian
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - DOCKER_MODS=linuxserver/mods:lazylibrarian-ffmpeg #optional
+    volumes:
+      - ../Data/config:/config
+      - ../Data/downloads:/downloads
+      - ../Data/books:/books
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../Config/nginx.conf:/etc/nginx/nginx.conf
+      - ../Data/nginx:/etc/ssl/private
