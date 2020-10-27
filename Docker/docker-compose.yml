@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   lazylibrarian:
-    image: linuxserver/lazylibrarian
+    image: linuxserver/lazylibrarian:1ae32b40-ls30
     container_name: lazylibrarian
     hostname: lazylibrarian
     restart: unless-stopped
@@ -14,14 +14,13 @@ services:
       - ../Data/config:/config
       - ../Data/downloads:/downloads
       - ../Data/books:/books
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    hostname: nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ../Config/nginx.conf:/etc/nginx/nginx.conf
-      - ../Data/nginx:/etc/ssl/private
+    labels:
+      # Traefik Labels
+      - "traefik.enable=true"
+      # HTTPS Labels
+      - "traefik.http.routers.lazylibrarian.rule=Host(`localhost`)" # Domain Name
+      - "traefik.http.routers.lazylibrarian.entrypoints=web-secure"
+        #- "traefik.http.routers.lazylibrarian.middlewares=default-headers@file"
+      - "traefik.http.routers.lazylibrarian.service=lazylibrarian"
+      - "traefik.http.routers.lazylibrarian.tls=true"
+      - "traefik.http.services.lazylibrarian.loadbalancer.server.port=5299" # Proxied Port
