@@ -2,7 +2,7 @@
 
 ## First Time Prerequisites
 
-1. Run [Traefik](https://github.com/mattlombana/App-Traefik)
+1. Run [Traefik](https://github.com/HackingServerHomelab/App-Traefik)
 
 ## Running the Containers
 
